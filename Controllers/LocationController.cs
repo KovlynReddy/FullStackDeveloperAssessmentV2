@@ -9,6 +9,8 @@ using FullStackAPIAssessment.Models;
 using FullStackDeveloperAssessment.Data;
 using System.Net.Http;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Text.RegularExpressions;
 
 namespace FullStackDeveloperAssessment.Controllers
 {
@@ -17,8 +19,8 @@ namespace FullStackDeveloperAssessment.Controllers
     {
         private readonly FullStackDeveloperAssessmentContext _context;
 
-        public HttpClientHandler _ClientHandler { get; set; }
-        public List<LocationModel> _Locations { get; set; }
+            public HttpClientHandler _ClientHandler { get; set; }
+            public List<LocationModel> _Locations { get; set; }
 
 
         public LocationController(FullStackDeveloperAssessmentContext context)
@@ -41,7 +43,100 @@ namespace FullStackDeveloperAssessment.Controllers
                 {
 
                     string apiresponse = await response.Content.ReadAsStringAsync();
-                    //_Locations = JsonConvert.DeserializeObject<List<LocationModel>>(apiresponse);
+                    // _Locations = JsonConvert.DeserializeObject<List<LocationModel>>(apiresponse);
+                    JObject data = JObject.Parse(apiresponse);
+
+                    string feild = "venue";
+
+                    string pattern = $"(\"{feild }\":).*(,\"ca)";
+
+                    // Define a regular expression for repeated words.
+                    Regex rx = new Regex(pattern,
+                    RegexOptions.Singleline | RegexOptions.IgnoreCase);
+
+                    // Define a test string.
+                    string text = apiresponse;
+
+                    // Find matches.
+                    MatchCollection matches = rx.Matches(text);
+
+                    string venueid = matches.First().Value;
+                    string VenueId = venueid.Substring(2,venueid.Length - 4); 
+
+                    feild = "categories";
+                    pattern = $"(\"{feild}\":).*(,\"ve)";
+                    Regex rx1 = new Regex(pattern,
+                    RegexOptions.Singleline | RegexOptions.IgnoreCase);
+                    matches = rx1.Matches(text);
+                    string categories = matches.First().Value;
+                    //10()7 
+                    //var resultString = Regex.Match(venueid, @"\d+").Value;
+                    var Categories = categories.Substring(6, categories.Length - 9);
+
+                    feild = "id";
+                    pattern = $"(\"{feild}\":).*(,\"na)";
+                    rx1 = new Regex(pattern,
+                    RegexOptions.Singleline | RegexOptions.IgnoreCase);
+                    matches = rx1.Matches(text);
+                    string id = matches.First().Value;
+                    //10()7 
+                    //var resultString = Regex.Match(venueid, @"\d+").Value;
+                    var Id = id.Substring(10, (id.Length - 14));
+
+                    feild = "name";
+                    pattern = $"(\"{feild}\":).*(,\"pl)";
+                    rx1 = new Regex(pattern,
+                    RegexOptions.Singleline | RegexOptions.IgnoreCase);
+                    matches = rx1.Matches(text);
+                    string name = matches.First().Value;
+                    //10()7 
+                    //var resultString = Regex.Match(venueid, @"\d+").Value;
+                    var Name = name.Substring(11, (name.Length - 18));
+
+                    feild = "lat";
+                    pattern = $"(\"{feild}\":).*(,\"ln)";
+                    rx1 = new Regex(pattern,
+                    RegexOptions.Singleline | RegexOptions.IgnoreCase);
+                    matches = rx1.Matches(text);
+                    string lat = matches.First().Value;
+                    //10()7 
+                    //var resultString = Regex.Match(venueid, @"\d+").Value;
+                    var Lat = lat.Substring(8, 4);
+
+
+                    feild = "lng";
+                    pattern = $"(\"{feild}\":).*(,\"di)";
+                    rx1 = new Regex(pattern,
+                    RegexOptions.Singleline | RegexOptions.IgnoreCase);
+                    matches = rx1.Matches(text);
+                    string lng = matches.First().Value;
+                    //10()7 
+                    //var resultString = Regex.Match(venueid, @"\d+").Value;
+                    var Lng = lng.Substring(9, (lng.Length - 12));
+
+
+                    feild = "address";
+                    pattern = $"(\"{feild}\":).*(\"lab)";
+                    rx1 = new Regex(pattern,
+                    RegexOptions.Singleline | RegexOptions.IgnoreCase);
+                    matches = rx1.Matches(text);
+                    string address = matches.First().Value;
+                    //10()7 
+                    //var resultString = Regex.Match(venueid, @"\d+").Value;
+                    var Address = address.Substring(9, (address.Length - 12));
+
+
+                    LocationModel location = new LocationModel();
+                    location.LocationId = Id;
+                    location.name = Name;
+                    location.lat = Lat;
+                    location.lng = Lng;
+                    //location.address = Address;
+
+
+                    _context.LocationModel.Add(location);
+                    _context.SaveChanges();
+
 
                     return Content(apiresponse);
                 }
@@ -59,7 +154,7 @@ namespace FullStackDeveloperAssessment.Controllers
                 {
 
                     string apiresponse = await response.Content.ReadAsStringAsync();
-                    //_Locations = JsonConvert.DeserializeObject<List<LocationModel>>(apiresponse);
+                    _Locations = JsonConvert.DeserializeObject<List<LocationModel>>(apiresponse);
                     return Content(apiresponse);
                 }
             }

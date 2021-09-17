@@ -52,7 +52,7 @@ namespace FullStackDeveloperAssessment
                 endpoints.MapControllers();
                 endpoints.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Location}/{action=Index}/{id?}");
 
                 endpoints.MapControllerRoute(
                 name: "areas",
