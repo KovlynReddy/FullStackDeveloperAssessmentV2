@@ -17,8 +17,8 @@ namespace FullStackDeveloperAssessment.Controllers
     {
         private readonly FullStackDeveloperAssessmentContext _context;
 
-        public HttpClientHandler _ClientHandler { get; set; }
-        public List<LocationModel> _Locations { get; set; }
+            public HttpClientHandler _ClientHandler { get; set; }
+            public List<LocationModel> _Locations { get; set; }
 
 
         public LocationController(FullStackDeveloperAssessmentContext context)

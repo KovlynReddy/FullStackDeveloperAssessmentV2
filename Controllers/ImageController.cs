@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FullStackAPIAssessment.Models;
 using FullStackDeveloperAssessment.Data;
+using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace FullStackDeveloperAssessment.Controllers
 {
@@ -14,10 +16,74 @@ namespace FullStackDeveloperAssessment.Controllers
     {
         private readonly FullStackDeveloperAssessmentContext _context;
 
+        public HttpClientHandler _ClientHandler { get; set; }
+        public List<LocationModel> _Locations { get; set; }
+
+
         public ImageController(FullStackDeveloperAssessmentContext context)
         {
+            _ClientHandler = new HttpClientHandler();
             _context = context;
         }
+
+        #region Locations
+
+        [HttpGet]
+        public async Task<ContentResult> GetAllImages()
+        {
+
+            using (var httpClient = new HttpClient(_ClientHandler))
+            {
+                using (var response = await httpClient.GetAsync(@$"https://api.foursquare.com/v2/venues/4bb9e5161261d13a22f3e998/photos?client_id=000MLTLRGKEVBPAYHBVUPP0NPCPRAZ11E22WXRWCL4R341GO&client_secret=M3CYWBKDUZ23R4BWVMEM1K5NFDPEGY5GM1PYKG4TQLJQZS2S&v=20190425&group=venue&limit=10"))
+                {
+
+                    string apiresponse = await response.Content.ReadAsStringAsync();
+                    //_Locations = JsonConvert.DeserializeObject<List<LocationModel>>(apiresponse);
+
+                    return Content(apiresponse);
+                }
+            }
+
+        }
+
+        [HttpGet]
+        public async Task<ContentResult> GetLocationImage(string id)
+        {
+
+            using (var httpClient = new HttpClient(_ClientHandler))
+            {
+                using (var response = await httpClient.GetAsync(@$"https://api.foursquare.com/v2/venues/{id}/photos?client_id=000MLTLRGKEVBPAYHBVUPP0NPCPRAZ11E22WXRWCL4R341GO&client_secret=M3CYWBKDUZ23R4BWVMEM1K5NFDPEGY5GM1PYKG4TQLJQZS2S&v=20190425&group=venue&limit=10"))
+                {
+
+                    string apiresponse = await response.Content.ReadAsStringAsync();
+                    //_Locations = JsonConvert.DeserializeObject<List<LocationModel>>(apiresponse);
+                    return Content(apiresponse);
+                }
+            }
+
+            //            return _Locations;
+        }
+
+        [HttpGet]
+        public async Task<LocationModel> GetImage(string LocationClause)
+        {
+
+            LocationModel Location = new LocationModel();
+
+            using (var httpClient = new HttpClient(_ClientHandler))
+            {
+                using (var response = await httpClient.GetAsync(@$"https://api.foursquare.com/v2/venues/explore?client_id=000MLTLRGKEVBPAYHBVUPP0NPCPRAZ11E22WXRWCL4R341GO&client_secret=M3CYWBKDUZ23R4BWVMEM1K5NFDPEGY5GM1PYKG4TQLJQZS2S&v=20180323&limit=1&feilds=name&ll=-29.688079382295278, 31.00824366802357&query={LocationClause}"))
+                {
+
+                    string apiresponse = await response.Content.ReadAsStringAsync();
+                    Location = JsonConvert.DeserializeObject<LocationModel>(apiresponse);
+
+                }
+            }
+
+            return Location;
+        }
+        #endregion
 
         // GET: Image
         public async Task<IActionResult> Index()
