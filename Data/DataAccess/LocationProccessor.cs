@@ -9,7 +9,14 @@ namespace FullStackDeveloperAssessment.Data.DataAccess
 {
     public class LocationProccessor : ILocationsDB
     {
-        public LocationModel AddImage(LocationModel model)
+        private readonly FullStackDeveloperAssessmentContext context;
+
+        public LocationProccessor(FullStackDeveloperAssessmentContext context)
+        {
+            this.context = context;
+        }
+
+        public ImageModel AddImage(ImageModel model)
         {
             throw new NotImplementedException();
         }
@@ -19,12 +26,12 @@ namespace FullStackDeveloperAssessment.Data.DataAccess
             throw new NotImplementedException();
         }
 
-        public LocationModel DeleteImage(LocationModel model)
+        public ImageModel DeleteImage(ImageModel model)
         {
             throw new NotImplementedException();
         }
 
-        public LocationModel DeleteImage(string id)
+        public ImageModel DeleteImage(string id)
         {
             throw new NotImplementedException();
         }
@@ -39,7 +46,7 @@ namespace FullStackDeveloperAssessment.Data.DataAccess
             throw new NotImplementedException();
         }
 
-        public LocationModel EditImage(LocationModel model)
+        public ImageModel EditImage(ImageModel model)
         {
             throw new NotImplementedException();
         }
@@ -49,22 +56,28 @@ namespace FullStackDeveloperAssessment.Data.DataAccess
             throw new NotImplementedException();
         }
 
-        public LocationModel GetAllImages()
+        public List<ImageModel> GetAllImages()
         {
             throw new NotImplementedException();
         }
 
-        public LocationModel GetAllLocations()
+        public List<LocationModel> GetAllLocations()
         {
             throw new NotImplementedException();
         }
 
-        public LocationModel GetImage(int id)
+        public List<LocationModel> GetAllMyLocations(string id)
+        {
+            var locations = context.LocationModel.ToList();
+            return locations = locations.Where(m => m.photoid == id).ToList(); 
+        }
+
+        public ImageModel GetImage(int id)
         {
             throw new NotImplementedException();
         }
 
-        public LocationModel GetImage(string id)
+        public ImageModel GetImage(string id)
         {
             throw new NotImplementedException();
         }
@@ -77,6 +90,12 @@ namespace FullStackDeveloperAssessment.Data.DataAccess
         public LocationModel GetLocation(string id)
         {
             throw new NotImplementedException();
+        }
+
+        List<ImageModel> ILocationsDB.GetAllMyImages(string id)
+        {
+            var images = context.ImageModel.ToList();
+            return images.Where(m => m.meta == id).ToList();
         }
     }
 }

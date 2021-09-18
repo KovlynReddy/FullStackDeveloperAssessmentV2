@@ -17,5 +17,7 @@ namespace FullStackDeveloperAssessment.Data
         public DbSet<FullStackAPIAssessment.Models.LocationModel> LocationModel { get; set; }
 
         public DbSet<FullStackAPIAssessment.Models.ImageModel> ImageModel { get; set; }
+
+        public DbSet<FullStackAPIAssessment.Models.UserModel> UserModel { get; set; }
     }
 }

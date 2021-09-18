@@ -12,6 +12,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using FullStackDeveloperAssessment.Data;
+using FullStackAPIAssessment.Interfaces;
+using FullStackDeveloperAssessment.Data.DataAccess;
 
 namespace FullStackDeveloperAssessment
 {
@@ -31,6 +33,10 @@ namespace FullStackDeveloperAssessment
 
             services.AddDbContext<FullStackDeveloperAssessmentContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("FullStackDeveloperAssessmentContext")));
+
+            services.AddSingleton<ILocationsDB,LocationProccessor>();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +59,11 @@ namespace FullStackDeveloperAssessment
                 endpoints.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Location}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
+                name: "user",
+                pattern: "{controller=User}/{action=Index}/{id?}/{userid?}");
+
 
                 endpoints.MapControllerRoute(
                 name: "areas",
