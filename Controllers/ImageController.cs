@@ -227,9 +227,9 @@ namespace FullStackDeveloperAssessment.Controllers
                         var buffer = match.Value;
                     }
 
-                    
+                    image.prefix = image.prefix.Replace("\\","");
 
-                    string url = (image.prefix + $"[{image.width}x{image.height}]" + image.suffix);
+                    string url = (image.prefix + $"{image.width}x{image.height}" + image.suffix+"png");
                     return Redirect(url);
 
                     //            return _Locations;
