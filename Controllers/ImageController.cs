@@ -7,9 +7,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FullStackAPIAssessment.Models;
 using FullStackDeveloperAssessment.Data;
-using System.Net.Http;
-using Newtonsoft.Json;
-using System.Text.RegularExpressions;
 
 namespace FullStackDeveloperAssessment.Controllers
 {
@@ -35,95 +32,11 @@ namespace FullStackDeveloperAssessment.Controllers
 
             using (var httpClient = new HttpClient(_ClientHandler))
             {
-                using (var response = await httpClient.GetAsync(@$"https://api.foursquare.com/v2/venues/4b9cd8adf964a520747e36e3/photos?client_id=000MLTLRGKEVBPAYHBVUPP0NPCPRAZ11E22WXRWCL4R341GO&client_secret=M3CYWBKDUZ23R4BWVMEM1K5NFDPEGY5GM1PYKG4TQLJQZS2S&v=20190425&group=venue&limit=10"))
+                using (var response = await httpClient.GetAsync(@$"https://api.foursquare.com/v2/venues/4bb9e5161261d13a22f3e998/photos?client_id=000MLTLRGKEVBPAYHBVUPP0NPCPRAZ11E22WXRWCL4R341GO&client_secret=M3CYWBKDUZ23R4BWVMEM1K5NFDPEGY5GM1PYKG4TQLJQZS2S&v=20190425&group=venue&limit=10"))
                 {
 
                     string apiresponse = await response.Content.ReadAsStringAsync();
                     //_Locations = JsonConvert.DeserializeObject<List<LocationModel>>(apiresponse);
-                    string feild = "id";
-
-                    string pattern = $"(\"{feild }\":).*(,)";
-
-                    // Define a regular expression for repeated words.
-                    Regex rx = new Regex(pattern,
-                    RegexOptions.Singleline | RegexOptions.IgnoreCase);
-
-        // Define a test string.
-                    string text = apiresponse;
-
-        // Find matches.
-                    MatchCollection matches = rx.Matches(text);
-
-
-                    feild = "id";
-                    pattern = $"(\"{feild}\":).*(,\"c)";
-                    Regex rx1 = new Regex(pattern,
-                    RegexOptions.Singleline | RegexOptions.IgnoreCase);
-                    matches = rx1.Matches(text);
-                    string venueid = matches.First().Value;
-                    //10()7 
-                    //var resultString = Regex.Match(venueid, @"\d+").Value;
-                    var VenueId = venueid.Substring(6,24);
-
-                    feild = "prefix";
-                    pattern = $"(\"{feild}\":).*(,\"s)";
-                    rx1 = new Regex(pattern,
-                    RegexOptions.Singleline | RegexOptions.IgnoreCase);
-                    matches = rx1.Matches(text);
-                    string prefix = matches.First().Value;
-                    //10()7 
-                    //var resultString = Regex.Match(venueid, @"\d+").Value;
-                    var Prefix = prefix.Substring(10, (prefix.Length - 14));
-
-                    feild = "suffix";
-                    pattern = $"(\"{feild}\":).*(,\"w)";
-                    rx1 = new Regex(pattern,
-                    RegexOptions.Singleline | RegexOptions.IgnoreCase);
-                    matches = rx1.Matches(text);
-                    string suffix = matches.First().Value;
-                    //10()7 
-                    //var resultString = Regex.Match(venueid, @"\d+").Value;
-                    var Suffix = suffix.Substring( 11 , (suffix.Length - 18));
-
-                    feild = "width";
-                    pattern = $"(\"{feild}\":).*(,\"h)";
-                    rx1 = new Regex(pattern,
-                    RegexOptions.Singleline | RegexOptions.IgnoreCase);
-                    matches = rx1.Matches(text);
-                    string width = matches.First().Value;
-                    //10()7 
-                    //var resultString = Regex.Match(venueid, @"\d+").Value;
-                    var Width = width.Substring(8,4);
-
-
-                    feild = "height";
-                    pattern = $"(\"{feild}\":).*(,\"v)";
-                    rx1 = new Regex(pattern,
-                    RegexOptions.Singleline | RegexOptions.IgnoreCase);
-                    matches = rx1.Matches(text);
-                    string height = matches.First().Value;
-                    //10()7 
-                    //var resultString = Regex.Match(venueid, @"\d+").Value;
-                    var Height = height.Substring(9, (height.Length - 12));
-
-
-
-                    ImageModel image = new ImageModel();
-                    image.venueid = VenueId;
-                    image.prefix = Prefix;
-                    image.suffix = Suffix;
-                    image.width = Width;
-                    image.height = Height;
-
-                    _context.ImageModel.Add(image);
-                    _context.SaveChanges();
-
-                    // Report on each match.
-                    foreach (Match match in matches)
-                    {
-                        var buffer = match.Value;
-                    }
-
 
                     return Content(apiresponse);
                 }
@@ -145,30 +58,6 @@ namespace FullStackDeveloperAssessment.Controllers
                     return Content(apiresponse);
                 }
             }
-
-            //            return _Locations;
-        }
-
-        [HttpGet]
-        public async Task<LocationModel> GetImage(string LocationClause)
-        {
-
-            LocationModel Location = new LocationModel();
-
-            using (var httpClient = new HttpClient(_ClientHandler))
-            {
-                using (var response = await httpClient.GetAsync(@$"https://api.foursquare.com/v2/venues/explore?client_id=000MLTLRGKEVBPAYHBVUPP0NPCPRAZ11E22WXRWCL4R341GO&client_secret=M3CYWBKDUZ23R4BWVMEM1K5NFDPEGY5GM1PYKG4TQLJQZS2S&v=20180323&limit=1&feilds=name&ll=-29.688079382295278, 31.00824366802357&query={LocationClause}"))
-                {
-
-                    string apiresponse = await response.Content.ReadAsStringAsync();
-                    Location = JsonConvert.DeserializeObject<LocationModel>(apiresponse);
-
-                }
-            }
-
-            return Location;
-        }
-        #endregion
 
         // GET: Image
         public async Task<IActionResult> Index()
