@@ -34,7 +34,7 @@ namespace FullStackDeveloperAssessment.Controllers
         #region Locations
 
         [HttpGet]
-        public async Task<ContentResult> GetAllLocations()
+        public async Task<IActionResult> GetAllLocations()
         {
 
             using (var httpClient = new HttpClient(_ClientHandler))
@@ -61,7 +61,7 @@ namespace FullStackDeveloperAssessment.Controllers
                     MatchCollection matches = rx.Matches(text);
 
                     string venueid = matches.First().Value;
-                    string VenueId = venueid.Substring(2,venueid.Length - 4); 
+                    string VenueId = venueid.Substring(15,24); 
 
                     feild = "categories";
                     pattern = $"(\"{feild}\":).*(,\"ve)";
@@ -81,27 +81,31 @@ namespace FullStackDeveloperAssessment.Controllers
                     string id = matches.First().Value;
                     //10()7 
                     //var resultString = Regex.Match(venueid, @"\d+").Value;
-                    var Id = id.Substring(10, (id.Length - 14));
+                    var Id = id.Substring(10, 24);
 
                     feild = "name";
-                    pattern = $"(\"{feild}\":).*(,\"pl)";
+                    pattern = $"(\"{feild}\":).*(,\"contact)";
                     rx1 = new Regex(pattern,
                     RegexOptions.Singleline | RegexOptions.IgnoreCase);
-                    matches = rx1.Matches(text);
+                    matches = rx1.Matches(venueid);
                     string name = matches.First().Value;
                     //10()7 
                     //var resultString = Regex.Match(venueid, @"\d+").Value;
-                    var Name = name.Substring(11, (name.Length - 18));
+                    var Name = name.Substring(8, (name.Length - 18));
+
+                    var text2 = venueid;
+                    matches = rx1.Matches(text2);
+                    name = matches.First().Value;
 
                     feild = "lat";
-                    pattern = $"(\"{feild}\":).*(,\"ln)";
+                    pattern = $"(\"{feild}\":).*(,\"lng)";
                     rx1 = new Regex(pattern,
                     RegexOptions.Singleline | RegexOptions.IgnoreCase);
                     matches = rx1.Matches(text);
                     string lat = matches.First().Value;
                     //10()7 
                     //var resultString = Regex.Match(venueid, @"\d+").Value;
-                    var Lat = lat.Substring(8, 4);
+                    var Lat = lat.Substring(6, 6);
 
 
                     feild = "lng";
@@ -112,9 +116,9 @@ namespace FullStackDeveloperAssessment.Controllers
                     string lng = matches.First().Value;
                     //10()7 
                     //var resultString = Regex.Match(venueid, @"\d+").Value;
-                    var Lng = lng.Substring(9, (lng.Length - 12));
+                    var Lng = lng.Substring(6, 6);
 
-
+                    /*
                     feild = "address";
                     pattern = $"(\"{feild}\":).*(\"lab)";
                     rx1 = new Regex(pattern,
@@ -124,10 +128,10 @@ namespace FullStackDeveloperAssessment.Controllers
                     //10()7 
                     //var resultString = Regex.Match(venueid, @"\d+").Value;
                     var Address = address.Substring(9, (address.Length - 12));
-
+                    */
 
                     LocationModel location = new LocationModel();
-                    location.LocationId = Id;
+                    location.LocationId = VenueId;
                     location.name = Name;
                     location.lat = Lat;
                     location.lng = Lng;
@@ -137,7 +141,7 @@ namespace FullStackDeveloperAssessment.Controllers
                     _context.LocationModel.Add(location);
                     _context.SaveChanges();
 
-
+                    return RedirectToAction("GetLocationImage","Image",new { id = location.LocationId });
                     return Content(apiresponse);
                 }
             }
