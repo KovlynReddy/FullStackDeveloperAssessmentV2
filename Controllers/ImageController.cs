@@ -48,10 +48,10 @@ namespace FullStackDeveloperAssessment.Controllers
                     Regex rx = new Regex(pattern,
                     RegexOptions.Singleline | RegexOptions.IgnoreCase);
 
-        // Define a test string.
+                    // Define a test string.
                     string text = apiresponse;
 
-        // Find matches.
+                    // Find matches.
                     MatchCollection matches = rx.Matches(text);
 
 
@@ -63,7 +63,7 @@ namespace FullStackDeveloperAssessment.Controllers
                     string venueid = matches.First().Value;
                     //10()7 
                     //var resultString = Regex.Match(venueid, @"\d+").Value;
-                    var VenueId = venueid.Substring(6,24);
+                    var VenueId = venueid.Substring(6, 24);
 
                     feild = "prefix";
                     pattern = $"(\"{feild}\":).*(,\"s)";
@@ -83,7 +83,7 @@ namespace FullStackDeveloperAssessment.Controllers
                     string suffix = matches.First().Value;
                     //10()7 
                     //var resultString = Regex.Match(venueid, @"\d+").Value;
-                    var Suffix = suffix.Substring( 11 , (suffix.Length - 18));
+                    var Suffix = suffix.Substring(11, (suffix.Length - 18));
 
                     feild = "width";
                     pattern = $"(\"{feild}\":).*(,\"h)";
@@ -93,7 +93,7 @@ namespace FullStackDeveloperAssessment.Controllers
                     string width = matches.First().Value;
                     //10()7 
                     //var resultString = Regex.Match(venueid, @"\d+").Value;
-                    var Width = width.Substring(8,4);
+                    var Width = width.Substring(8, 4);
 
 
                     feild = "height";
