@@ -198,7 +198,7 @@ namespace FullStackDeveloperAssessment.Controllers
                         // _Locations = JsonConvert.DeserializeObject<List<LocationModel>>(apiresponse);
                         JObject data = JObject.Parse(apiresponse);
 
-                        string feild = "venue";
+                        string feild = "venue"; 
 
                         string pattern = $"(\"{feild }\":).*(,\"ca)";
 

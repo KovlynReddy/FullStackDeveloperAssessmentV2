@@ -293,6 +293,24 @@ namespace FullStackDeveloperAssessment.Controllers
         }
         #endregion
 
+
+        public async Task<IActionResult> GetImageDetails(string id) {
+
+
+            using (var httpClient = new HttpClient(_ClientHandler))
+            {
+                using (var response = await httpClient.GetAsync(@$"https://api.foursquare.com/v2/venues/explore?client_id=000MLTLRGKEVBPAYHBVUPP0NPCPRAZ11E22WXRWCL4R341GO&client_secret=M3CYWBKDUZ23R4BWVMEM1K5NFDPEGY5GM1PYKG4TQLJQZS2S&v=20180323&limit=1&feilds=name&ll=-29.688079382295278, 31.00824366802357&query={LocationClause}"))
+                {
+
+                    string apiresponse = await response.Content.ReadAsStringAsync();
+ 
+                }
+            }
+
+            return null;
+
+        }
+
         // GET: Image
         public async Task<IActionResult> Index()
         {
