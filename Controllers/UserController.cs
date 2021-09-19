@@ -290,18 +290,32 @@ namespace FullStackDeveloperAssessment.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllMyLocations(string id) {
 
-            var mylocations = db.GetAllMyLocations(id);
+            var locations = _context.LocationModel.ToList();
+            var mylocations = locations.Where(m=>m.meta == id).ToList();
 
-            return null;
+            string content = "";
+
+            foreach (var location in mylocations)
+            {
+                content += location.name + "\n";
+            }
+            return Content(content);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllMyImages(string id)
         {
 
-            var mylocations = db.GetAllMyImages(id);
+            var locations = _context.ImageModel.ToList();
+            var mylocations = locations.Where(m => m.meta == id).ToList();
 
-            return null;
+            string content = "";
+
+            foreach (var location in mylocations)
+            {
+                content += location.name + "\n";
+            }
+            return Content(content);
         }
 
         // GET: User
