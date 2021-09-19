@@ -22,10 +22,10 @@ namespace FullStackDeveloperAssessment.Controllers
         public HttpClientHandler _ClientHandler { get; set; }
         public List<LocationModel> _Locations { get; set; }
 
-        public UserController(FullStackDeveloperAssessmentContext context,ILocationsDB db)
+        public UserController(FullStackDeveloperAssessmentContext context)
         {
             _context = context;
-            this.db = db;
+            //this.db = db;
             _ClientHandler = new HttpClientHandler();
         }
 
@@ -151,11 +151,11 @@ namespace FullStackDeveloperAssessment.Controllers
                     location.name = Name;
                     location.lat = Lat;
                     location.lng = Lng;
-                    location.photoid = userid;
+                    location.meta = userid;
                     //location.address = Address;
 
 
-                    var duplicates = _context.LocationModel.Where(m => m.LocationId == location.LocationId && location.photoid == userid);
+                    var duplicates = _context.LocationModel.Where(m => m.LocationId == location.LocationId && location.meta == userid);
 
                     if (duplicates.Count() < 1)
                     {
@@ -163,7 +163,7 @@ namespace FullStackDeveloperAssessment.Controllers
 
                         _context.SaveChanges();
                     }
-                    return RedirectToAction("GetLocationImage", "Image", new { id = location.LocationId });
+                    return RedirectToAction("GetLocationImage", "User", new { id = location.LocationId , userid = userid });
 
                     return Content(apiresponse);
                 }
@@ -278,7 +278,8 @@ namespace FullStackDeveloperAssessment.Controllers
 
                     image.prefix = image.prefix.Replace("\\", "");
 
-                    string url = (image.prefix + $"{image.width}x{image.height}" + image.suffix + "png");
+                    //string url = (image.prefix + $"{image.width}x{image.height}" + image.suffix + "png");
+                    string url = (image.prefix + $"300x500" + image.suffix + "jpg");
                     return Redirect(url);
 
                     //            return _Locations;
@@ -286,6 +287,22 @@ namespace FullStackDeveloperAssessment.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAllMyLocations(string id) {
+
+            var mylocations = db.GetAllMyLocations(id);
+
+            return null;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllMyImages(string id)
+        {
+
+            var mylocations = db.GetAllMyImages(id);
+
+            return null;
+        }
 
         // GET: User
         public async Task<IActionResult> Index()

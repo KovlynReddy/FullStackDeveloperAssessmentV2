@@ -242,7 +242,7 @@ namespace FullStackDeveloperAssessment.Controllers
 
                     image.prefix = image.prefix.Replace("\\","");
 
-                    string url = (image.prefix + $"{image.width}x{image.height}" + image.suffix+"png");
+                    string url = (image.prefix + $"{image.width}x{image.height}" + image.suffix+"jpg");
                     return Redirect(url);
 
                     //            return _Locations;

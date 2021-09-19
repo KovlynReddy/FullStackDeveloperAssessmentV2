@@ -34,7 +34,7 @@ namespace FullStackDeveloperAssessment
             services.AddDbContext<FullStackDeveloperAssessmentContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("FullStackDeveloperAssessmentContext")));
 
-            services.AddSingleton<ILocationsDB,LocationProccessor>();
+            //services.AddSingleton<ILocationsDB,LocationProccessor>();
 
 
         }
