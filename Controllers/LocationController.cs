@@ -459,5 +459,11 @@ namespace FullStackDeveloperAssessment.Controllers
         {
             return _context.LocationModel.Any(e => e.LocationId == id);
         }
+
+        public Task<IActionResult> SearchForLocationByCoords(string lat,string lng) {
+
+            return null;
+        }
+
     }
 }
